@@ -34,10 +34,10 @@ def get_auth_file_path() -> Path:
 def get_auth_file_paths() -> list[Path]:
     """Get all auth.json paths used for resolution, in priority order.
 
-    With ``-l`` / ``--local`` the project-local path (``./.janito/auth.json``)
-    comes first, followed by the base path (``~/.janito/auth.json`` or the
-    ``-c`` / ``--config-dir`` override). Otherwise only the base path is
-    returned.
+    The project-local path (``./.janito/auth.json``) always comes first,
+    followed by the base path (``~/.janito/auth.json`` or the ``-c`` /
+    ``--config-dir`` override). ``-l`` / ``--local`` only selects the write
+    target.
 
     Returns:
         List of paths, highest priority first.

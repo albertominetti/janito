@@ -32,10 +32,10 @@ def get_config_path() -> Path:
 def get_config_paths() -> list[Path]:
     """Get all config.json paths used for resolution, in priority order.
 
-    With ``-l`` / ``--local`` the project-local path (``./.janito/config.json``)
-    comes first, followed by the base path (``~/.janito/config.json`` or the
-    ``-c`` / ``--config-dir`` override). Otherwise only the base path is
-    returned.
+    The project-local path (``./.janito/config.json``) always comes first,
+    followed by the base path (``~/.janito/config.json`` or the ``-c`` /
+    ``--config-dir`` override). Reads merge local over base in any case;
+    ``-l`` / ``--local`` only selects the write target.
 
     Returns:
         List of paths, highest priority first.
@@ -90,18 +90,18 @@ class ConfigStore:
 
     The store centralizes the four config operations (``load``, ``save``,
     ``get``, ``set``/``unset``) plus the provider/model-scoped key handling
-    that ``set`` and ``unset`` used to duplicate.  Reads merge the resolution
-    chain (project-local over base when ``-l`` / ``--local`` is active);
-    writes always target the primary (write) config file only, never the
-    merged view.
+    that ``set`` and ``unset`` used to duplicate.  Reads always merge the
+    resolution chain (project-local over base); writes always target the
+    primary (write) config file only, never the merged view.
     """
 
     def load(self) -> dict[str, Any]:
         """Load the entire config, merged across the resolution chain.
 
-        With ``-l`` / ``--local`` the project-local config.json (``./.janito``)
-        is deep-merged over the base one (``~/.janito`` or the ``-c`` override)
-        so local values take precedence; otherwise the single base file is read.
+        The project-local config.json (``./.janito``) is always deep-merged
+        over the base one (``~/.janito`` or the ``-c`` override) so local
+        values take precedence. ``-l`` / ``--local`` only selects the write
+        target.
 
         Returns:
             Dict containing the config, or empty dict if no file exists or is invalid
@@ -381,9 +381,9 @@ _store = ConfigStore()
 def load_config() -> dict[str, Any]:
     """Load the entire config.json file (merged across the resolution chain).
 
-    With ``-l`` / ``--local`` the project-local config.json (``./.janito``) is
-    deep-merged over the base one (``~/.janito`` or the ``-c`` override) so
-    local values take precedence; otherwise the single base file is read.
+    The project-local config.json (``./.janito``) is always deep-merged over
+    the base one (``~/.janito`` or the ``-c`` override) so local values take
+    precedence. ``-l`` / ``--local`` only selects the write target.
 
     Returns:
         Dict containing the config, or empty dict if no file exists or is invalid

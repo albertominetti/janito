@@ -34,10 +34,10 @@ def get_secrets_file_path() -> Path:
 def get_secrets_file_paths() -> list[Path]:
     """Get all secrets.json paths used for resolution, in priority order.
 
-    With ``-l`` / ``--local`` the project-local path (``./.janito/secrets.json``)
-    comes first, followed by the base path (``~/.janito/secrets.json`` or the
-    ``-c`` / ``--config-dir`` override). Otherwise only the base path is
-    returned.
+    The project-local path (``./.janito/secrets.json``) always comes first,
+    followed by the base path (``~/.janito/secrets.json`` or the ``-c`` /
+    ``--config-dir`` override). ``-l`` / ``--local`` only selects the write
+    target.
 
     Returns:
         List of paths, highest priority first.

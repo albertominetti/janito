@@ -4,7 +4,7 @@
 (``~/.janito/secrets.json``) and ``mcp_config`` (``~/.janito/mcp_services.json``)
 all implement the same pattern: a JSON file in the config directory with
 path resolution (project-local ``./.janito`` first, base directory as the
-fallback when ``-l`` / ``--local`` is active), a load that deep-merges the
+fallback, always merged), a load that deep-merges the
 resolution chain (local wins), a save that creates the directory and (for
 auth/secrets) restricts permissions to the owner (``0600``), and a small set
 of get/set/delete/list operations.
@@ -38,7 +38,7 @@ class JsonFileStore:
             after saving. Defaults to ``True``.
         merge_local: Whether reads resolve the project-local file first and
             fall back to the base file, merging the chain with local values
-            winning (``-l`` / ``--local`` mode). When ``False`` only the base
+            winning (always merged). When ``False`` only the write-target
             file is read. Defaults to ``True``.
         default: The mapping returned when the file does not exist. Defaults
             to ``{}``.
@@ -68,8 +68,8 @@ class JsonFileStore:
     def file_paths(self) -> list[Path]:
         """Get all paths used for resolution, in priority order.
 
-        With ``-l`` / ``--local`` the project-local path comes first, followed
-        by the base path; otherwise only the base path is returned.
+        The project-local path always comes first, followed by the base
+        path; ``-l`` / ``--local`` only selects the write target.
         """
         return get_config_file_paths(self.filename)
 

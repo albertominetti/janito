@@ -76,10 +76,9 @@ def normalize_provider(provider: str | None) -> str | None:
 def read_providers_map() -> dict[str, Any]:
     """Read the merged ``providers`` map from config.json.
 
-    Merges the resolution chain (project-local over base when ``-l`` /
-    ``--local`` is active) the same way :class:`ConfigStore.load` does, but
-    only for the top-level ``providers`` keys -- enough for membership
-    checks (variant registration, configured per-model entries) without
+    Always merges the resolution chain (project-local over base), the same
+    way :class:`ConfigStore.load` does, but only for the top-level
+    ``providers`` keys -- enough for membership checks (variant registration, configured per-model entries) without
     importing the config-store layer.
 
     Returns:

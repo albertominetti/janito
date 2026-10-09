@@ -90,6 +90,9 @@ if pytest is not None:
         # Write under a custom dir, then switch back to default and confirm the
         # value is NOT visible there (proving true isolation).
         _point_at(monkeypatch, tmp_path)
+        isolated = tmp_path / "isolated_cwd"
+        isolated.mkdir(exist_ok=True)
+        monkeypatch.chdir(isolated)
         gc.set_config_value("provider", "openai")
         assert gc.load_config().get("provider") == "openai"
 

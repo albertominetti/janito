@@ -1,12 +1,12 @@
 """
 Tests for the -l/--local CLI switch (project-local configuration).
 
+Project-local ``./.janito`` is always merged over the base directory
+(global ``~/.janito`` or the ``-c`` / ``--config-dir`` override) on reads.
 When ``-l`` / ``--local`` is active:
 
 - ``--set`` / ``--set-api-key`` / ``--set-secret`` (and friends) write to the
-  project-local ``./.janito`` directory instead of the base (global
-  ``~/.janito`` or the ``-c`` / ``--config-dir`` override) directory.
-- Reads resolve local values first and fall back to the base directory.
+  project-local ``./.janito`` directory instead of the base directory.
 - List operations show both the local and the global configuration.
 """
 
@@ -53,10 +53,26 @@ if pytest is not None:
         config_dir_mod.set_local_config_mode(False)
 
     def test_get_config_dirs_without_local(monkeypatch, tmp_path):
-        global_dir, _ = _use_temp_dirs(monkeypatch, tmp_path)
+        global_dir, project_dir = _use_temp_dirs(monkeypatch, tmp_path)
         config_dir_mod.set_local_config_mode(False)
-        assert config_dir_mod.get_config_dirs() == [global_dir]
+        # Reads always merge local over base; -l only selects the write target.
+        assert config_dir_mod.get_config_dirs() == [
+            project_dir / ".janito",
+            global_dir,
+        ]
         assert config_dir_mod.get_config_dir() == global_dir
+
+    def test_merge_without_local_flag(monkeypatch, tmp_path):
+        global_dir, project_dir = _use_temp_dirs(monkeypatch, tmp_path)
+        config_dir_mod.set_local_config_mode(False)
+        cs.set_config_value("provider", "openai")
+        cs.set_config_value("theme", "global")
+        # A local file present without -l still overrides on reads.
+        local = project_dir / ".janito"
+        local.mkdir(parents=True, exist_ok=True)
+        (local / "config.json").write_text(json.dumps({"theme": "local"}))
+        assert cs.load_config()["theme"] == "local"
+        assert cs.load_config()["provider"] == "openai"
 
     def test_get_config_dirs_with_local(monkeypatch, tmp_path):
         global_dir, project_dir = _use_temp_dirs(monkeypatch, tmp_path)

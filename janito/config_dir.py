@@ -6,11 +6,13 @@ mcp_services.json and the skills directory) lives under a single base
 directory. By default this is ``~/.janito`` but it can be overridden at
 runtime with the ``-c`` / ``--config-dir`` CLI flag (see :func:`set_config_dir`).
 
-A project-local mode can be enabled with the ``-l`` / ``--local`` CLI flag (see
-:func:`set_local_config_mode`): configuration is then written to ``./.janito``
-(the current working directory) instead of the base directory, and *reads*
-resolve the local directory first, falling back to the base directory (global
+A project-local directory ``./.janito`` (the current working directory) is
+always resolved first, falling back to the base directory (global
 ``~/.janito`` or the ``-c`` override) for anything not stored locally.
+The ``-l`` / ``--local`` CLI flag (see :func:`set_local_config_mode`)
+only selects the write target: configuration is then written to
+``./.janito`` instead of the base directory. Reads merge local over base
+in any case.
 
 This module intentionally has no dependencies on other janito modules so that
 it can be imported from any configuration module without risking circular
@@ -27,8 +29,9 @@ DEFAULT_CONFIG_DIR = Path.home() / ".janito"
 # the user passes -c/--config-dir. Defaults to :data:`DEFAULT_CONFIG_DIR`.
 _config_dir: Path = DEFAULT_CONFIG_DIR
 
-# Whether -l/--local was passed: configuration is stored in ./.janito (the
-# current working directory) and read with local-first priority.
+# Whether -l/--local was passed: configuration is written to ./.janito (the
+# current working directory). Reads always merge ./.janito over the base
+# directory; the flag only selects the write target.
 _local_mode: bool = False
 
 
@@ -67,8 +70,9 @@ def set_local_config_mode(enabled: bool) -> None:
 
     Called early in ``main()`` when the ``-l`` / ``--local`` flag is used. In
     local mode the project-local directory (``./.janito``) becomes the write
-    target for all configuration and is resolved with priority over the base
-    directory (see :func:`get_config_dirs`).
+    target for all configuration. Reads always merge the project-local
+    directory over the base directory (see :func:`get_config_dirs`),
+    with or without the flag.
 
     Args:
         enabled: Whether local mode should be active.
@@ -95,16 +99,15 @@ def get_config_dir() -> Path:
 def get_config_dirs() -> list[Path]:
     """Get the configuration directories used for resolution, in priority order.
 
-    When ``-l`` / ``--local`` is active the project-local directory
-    (``./.janito``) comes first and the base directory (global ``~/.janito`` or
-    the ``-c`` / ``--config-dir`` override) is the fallback. Otherwise only the
-    base directory is used.
+    The project-local directory (``./.janito``) always comes first and the
+    base directory (global ``~/.janito`` or the ``-c`` / ``--config-dir``
+    override) is the fallback. The ``-l`` / ``--local`` flag only selects
+    the write target (see :func:`get_config_dir`); reads merge local over
+    base in any case.
 
     Returns:
         List of directories to consult, highest priority first.
     """
-    if not _local_mode:
-        return [_config_dir]
     dirs = [get_local_config_dir()]
     if _config_dir != dirs[0]:
         dirs.append(_config_dir)
@@ -114,10 +117,9 @@ def get_config_dirs() -> list[Path]:
 def get_config_file_paths(name: str) -> list[Path]:
     """Get all paths for a configuration file, in resolution priority order.
 
-    When ``-l`` / ``--local`` is active the first entry is the project-local
-    path (``./.janito/<name>``) followed by the base path
-    (``~/.janito/<name>`` or the ``-c`` override); otherwise only the base path
-    is returned.
+    The first entry is always the project-local path (``./.janito/<name>``)
+    followed by the base path (``~/.janito/<name>`` or the ``-c`` override),
+    deduplicated when both resolve to the same directory.
 
     Args:
         name: The file name (e.g. ``"auth.json"``).

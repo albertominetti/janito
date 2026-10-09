@@ -26,8 +26,8 @@ Configuration:
   API keys are stored securely in ~/.janito/auth.json using --set-api-key
 
   With -l/--local, config/auth/secrets are stored in ./.janito (the current
-  working directory) instead of ~/.janito; reads resolve local values first,
-  falling back to the global ~/.janito, and list operations show both.
+  working directory) instead of ~/.janito; reads always resolve local values
+  first, falling back to the global ~/.janito, and list operations show both.
 
 Options:
   --delete-api-key   Delete the selected provider's stored API key
@@ -139,7 +139,7 @@ Note: --set and --set-api-key must be used in separate commands.
         action="store_true",
         help="Use the project-local config directory ./.janito (in the current "
         "working directory) for --set, --set-api-key, --set-secret, etc. "
-        "instead of ~/.janito. Reads resolve local values first and fall back "
+        "instead of ~/.janito. Reads always resolve local values first and fall back "
         "to the global ~/.janito; list operations show both.",
     )
 

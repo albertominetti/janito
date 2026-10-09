@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Changes since `v4.46.0` (2026-10-08).
 
+### Changed
+
+- Project-local `./.janito` is now always merged over the base config on
+  reads, with or without `-l`/`--local`. The flag only selects the write
+  target (global by default, local with `-l`).
+
 ### Added
 
 - Mistral Large 4 support (issue #27): new `mistral` provider with

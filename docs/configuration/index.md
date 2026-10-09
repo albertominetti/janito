@@ -16,11 +16,11 @@ janito stores your configuration in `~/.janito/`. The main configuration file is
 > (config, auth, secrets, MCP services and skills) in a different directory
 > instead of `~/.janito`. For example: `janito -c ~/myconf --set provider=openai`.
 
-> **Project-local config:** Use `-l`/`--local` to store config, API keys and
-> secrets in `./.janito` (the current working directory) instead of
-> `~/.janito`. Reads resolve local values first and fall back to the global
-> directory, and `--list-keys` / `--list-secrets` show both. For example:
-> `janito -l --set model=gpt-6-luna`.
+> **Project-local config:** `./.janito` (the current working directory) is always
+> resolved first, falling back to the global `~/.janito` directory. Use
+> `-l`/`--local` to *store* config, API keys and secrets in `./.janito`
+> instead of `~/.janito`; `--list-keys` / `--list-secrets` show both. For
+> example: `janito -l --set model=gpt-6-luna`.
 
 ### View Configuration
 
@@ -125,8 +125,8 @@ with exit code 1) and again at startup, so a session never starts with a
 broken path; the error names the key and path. An empty file falls back to the
 built-in base prompt (like an empty `AGENTS.md`).
 
-> **Note:** with `-l`/`--local`, `system-prompt-file` is resolved from the
-> project-local config, so a checked-in `./.janito/config.json` can point the
+> **Note:** `system-prompt-file` is resolved from the merged config, so a
+> checked-in `./.janito/config.json` can point the
 > start section at a repository file. This mirrors the existing trust model
 > that auto-loads a cwd `AGENTS.md` — only use local configs you trust.
 
@@ -180,14 +180,14 @@ Configuration is resolved from local files — janito does **not** read any
 overrides earlier):
 
 1. Provider's built-in default (endpoint) / no default (model)
-2. Configuration file (`~/.janito/config.json`; with `-l`/`--local`, the
-   project-local `./.janito/config.json` is consulted first and its values
+2. Configuration file (`~/.janito/config.json`; the project-local
+   `./.janito/config.json` is always consulted first and its values
    override the global ones)
 3. Command-line arguments (`--model`, `--provider`, `--set endpoint=...`)
 
 API keys are read from the per-provider key stored in `~/.janito/auth.json`
 (set with `--set-api-key <key> --provider <name>`). There is no environment
-variable fallback. With `-l`/`--local`, keys in `./.janito/auth.json` take
+variable fallback. Keys in `./.janito/auth.json` always take
 precedence over `~/.janito/auth.json`.
 
 > **Note:** When using CLI arguments, `--set` and `--set-api-key` must be run as **separate commands**. They cannot be combined in a single invocation.

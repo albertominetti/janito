@@ -21,7 +21,7 @@ If no prompt is given, janito starts an interactive chat shell.
 | Option | Description |
 |--------|-------------|
 | `-c`, `--config-dir <dir>` | Directory for all janito config (config, auth, secrets, MCP, skills). Defaults to `~/.janito` |
-| `-l`, `--local` | Use the project-local config directory `./.janito` (the current working directory) for `--set`, `--set-api-key`, `--set-secret`, etc. Reads resolve local values first and fall back to the global `~/.janito`; list operations show both |
+| `-l`, `--local` | Use the project-local config directory `./.janito` (the current working directory) for `--set`, `--set-api-key`, `--set-secret`, etc. Reads always resolve local values first and fall back to the global `~/.janito`; list operations show both |
 | `--config` | Open the interactive configuration wizard |
 | `--show-config` | Display the configured provider and model |
 | `--info` | Print resolved configuration (provider, model, API key) and exit |
@@ -196,10 +196,10 @@ janito --set-api-key sk-your-key   # uses the configured default provider
 
 ### Project-local configuration
 
-With `-l`/`--local`, configuration is stored in `./.janito` (the current
-working directory) instead of `~/.janito`. Reads resolve local values first
-and fall back to the global directory, and `--list-keys` / `--list-secrets`
-show both:
+`./.janito` (the current working directory) is always resolved first,
+falling back to the global `~/.janito` directory. With `-l`/`--local`,
+configuration is *stored* in `./.janito` instead of `~/.janito`, and
+`--list-keys` / `--list-secrets` show both:
 
 ```bash
 janito -l --set model=gpt-6-luna                  # store config in ./.janito

@@ -44,6 +44,7 @@ if pytest is not None:
 
     def test_get_set_roundtrip(monkeypatch, tmp_path):
         base = _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         store = ConfigStore()
         store.set("theme", "dark")
         assert store.get("theme") == "dark"
@@ -51,6 +52,7 @@ if pytest is not None:
 
     def test_provider_scoped_set_unset(monkeypatch, tmp_path):
         base = _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         store = ConfigStore()
         store.set("openai.model", "gpt-4")
         assert store.get("openai.model") == "gpt-4"
@@ -63,6 +65,7 @@ if pytest is not None:
 
     def test_provider_scoped_set_requires_scoped_key(monkeypatch, tmp_path):
         base = _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         store = ConfigStore()
         # "unknown.key" is not in PROVIDER_SCOPED_KEYS -> stored as a flat key.
         store.set("unknown.key", "value")
@@ -72,6 +75,7 @@ if pytest is not None:
 
     def test_flat_set_after_provider_scoped(monkeypatch, tmp_path):
         base = _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         store = ConfigStore()
         store.set("openai.model", "gpt-4")
         store.set("provider", "openai")
@@ -119,6 +123,7 @@ if pytest is not None:
 
     def test_load_missing_returns_empty(monkeypatch, tmp_path):
         _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         assert ConfigStore().load() == {}
 
     def test_load_invalid_json_raises(monkeypatch, tmp_path):
@@ -126,6 +131,7 @@ if pytest is not None:
         propagates `json.JSONDecodeError` (the docstring's "invalid" note
         predates the merged implementation)."""
         base = _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         (base / "config.json").parent.mkdir(parents=True, exist_ok=True)
         (base / "config.json").write_text("{ broken")
         with pytest.raises(json.JSONDecodeError):

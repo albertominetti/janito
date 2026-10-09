@@ -55,9 +55,15 @@ if pytest is not None:
 
     def test_base_paths(monkeypatch, tmp_path):
         base = _point_at(monkeypatch, tmp_path)
+        project = _project_cwd(monkeypatch, tmp_path)
         store = JsonFileStore("config.json")
+        # Without -l writes still target the base dir, but reads always
+        # resolve local first.
         assert store.file_path() == base / "config.json"
-        assert store.file_paths() == [base / "config.json"]
+        assert store.file_paths() == [
+            project / ".janito" / "config.json",
+            base / "config.json",
+        ]
 
     def test_base_file_paths_in_local_mode(monkeypatch, tmp_path):
         base = _point_at(monkeypatch, tmp_path)
@@ -72,12 +78,14 @@ if pytest is not None:
 
     def test_base_load_missing_returns_default(monkeypatch, tmp_path):
         _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         store = JsonFileStore("config.json", default={"services": {}})
         assert store.load() == {"services": {}}
         assert store.load() is not store.load()  # fresh copy each time
 
     def test_base_set_get_delete_roundtrip(monkeypatch, tmp_path):
         base = _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         store = JsonFileStore("config.json")
         assert store.set("theme", "dark") is True
         assert store.get("theme") == "dark"
@@ -89,6 +97,7 @@ if pytest is not None:
 
     def test_base_list_keys_excludes_metadata(monkeypatch, tmp_path):
         _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         store = JsonFileStore("config.json")
         store.set("a", 1)
         store.set("provider", "openai")
@@ -99,6 +108,7 @@ if pytest is not None:
         if sys.platform == "win32":
             pytest.skip(reason="POSIX chmod 0600 not enforced on Windows ACLs")
         _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         store = JsonFileStore("secret.json", chmod_600=True)
         store.save({"k": "v"})
         mode = store.file_path().stat().st_mode & 0o777
@@ -106,6 +116,7 @@ if pytest is not None:
 
     def test_base_save_no_chmod_when_disabled(monkeypatch, tmp_path):
         _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         store = JsonFileStore("plain.json", chmod_600=False)
         store.save({"k": "v"})
         mode = store.file_path().stat().st_mode & 0o777
@@ -132,6 +143,7 @@ if pytest is not None:
 
     def test_base_merge_malformed_line_skipped(monkeypatch, tmp_path):
         _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         store = JsonFileStore("config.json")
         store.set("a", 1)
         # Corrupt the file; load must not raise and must return the default.
@@ -146,6 +158,7 @@ if pytest is not None:
         if sys.platform == "win32":
             pytest.skip(reason="POSIX chmod 0600 not enforced on Windows ACLs")
         base = _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         store = AuthConfigStore()
         assert store.set_api_key("openai", "sk-1") is True
         assert store.get_api_key("openai") == "sk-1"
@@ -164,6 +177,7 @@ if pytest is not None:
         provider -> API key pairs.
         """
         _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         store = AuthConfigStore()
         assert store.set_api_key("openai", "sk-1") is True
         config = store.load()
@@ -195,6 +209,7 @@ if pytest is not None:
         if sys.platform == "win32":
             pytest.skip(reason="POSIX chmod 0600 not enforced on Windows ACLs")
         base = _point_at(monkeypatch, tmp_path)
+        _project_cwd(monkeypatch, tmp_path)
         store = SecretsConfigStore()
         assert store.set_secret("token", "abc") is True
         assert store.get_secret("token") == "abc"
