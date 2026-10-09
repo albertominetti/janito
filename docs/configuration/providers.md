@@ -33,6 +33,7 @@ The API type is selected per provider with `--set api-type=...` (see the
 | `moonshot` | Moonshot AI (Kimi models) |
 | `zai` | Z.AI (GLM models) |
 | `xai` | xAI (Grok models) |
+| `mistral` | Mistral AI (Mistral Large models) |
 | `anthropic` | Anthropic (Claude models) |
 | `atria` | Atria (Atria-Dawn-Preview) |
 | `openrouter` | OpenRouter (aggregator of many models) |
@@ -857,6 +858,41 @@ Model selection is restricted to the built-in models above.
 janito --set provider=xai --set model=grok-4.6
 # Step 2: Store API key
 janito --set-api-key="your-xai-api-key" --provider xai
+# Step 3: Run prompt
+janito "Explain quantum computing"
+```
+
+## Mistral AI
+
+Use Mistral AI to access Mistral Large models through their OpenAI-compatible API.
+
+> **Get an API key:** Visit [Mistral Console](https://console.mistral.ai/) to create an account and generate an API key.
+
+### Configuration
+
+```bash
+# Step 1: Set provider and model
+janito --set provider=mistral --set model=mistral-large-4
+# Step 2: Store API key
+janito --set-api-key="your-mistral-api-key" --provider mistral
+```
+
+### Popular Models
+
+| Model | Description |
+|-------|-------------|
+| `mistral-large-4` | Latest flagship model (default, built-in; 1M context, Completions-only) |
+
+Model selection is restricted to the built-in models above.
+`janito --list-models` shows the accepted names.
+
+### Example
+
+```bash
+# Step 1: Set provider and model
+janito --set provider=mistral --set model=mistral-large-4
+# Step 2: Store API key
+janito --set-api-key="your-mistral-api-key" --provider mistral
 # Step 3: Run prompt
 janito "Explain quantum computing"
 ```

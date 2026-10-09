@@ -11,6 +11,12 @@ Changes since `v4.46.0` (2026-10-08).
 
 ### Added
 
+- Mistral Large 4 support (issue #27): new `mistral` provider with
+  `mistral-large-4` (1M input, 256K output, Completions-only at
+  `https://api.mistral.ai/v1`), adjustable reasoning via `reasoning_effort`
+  (low/high/max, default high), function calling, and list-price cost
+  estimates.
+
 - Claude Haiku 5.5 support for Anthropic (issue #185), with a 1M-token
   context window, 128K output limit, and tiered cost estimates above
   100,000 prompt tokens. Sonnet remains the default model.

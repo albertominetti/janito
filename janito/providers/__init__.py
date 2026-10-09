@@ -23,6 +23,7 @@ from .deepseek.config import PROVIDER_CONFIG as _DEEPSEEK_CONFIG
 from .google.config import PROVIDER_CONFIG as _GOOGLE_CONFIG
 from .meta.config import PROVIDER_CONFIG as _META_CONFIG
 from .minimax.config import PROVIDER_CONFIG as _MINIMAX_CONFIG
+from .mistral.config import PROVIDER_CONFIG as _MISTRAL_CONFIG
 from .moonshot.config import PROVIDER_CONFIG as _MOONSHOT_CONFIG
 from .openai.config import PROVIDER_CONFIG as _OPENAI_CONFIG
 from .openrouter.config import PROVIDER_CONFIG as _OPENROUTER_CONFIG
@@ -43,6 +44,7 @@ _PROVIDER_CONFIGS: dict[str, dict] = {
     "alibaba": _ALIBABA_CONFIG,
     "zai": _ZAI_CONFIG,
     "meta": _META_CONFIG,
+    "mistral": _MISTRAL_CONFIG,
     "deepseek": _DEEPSEEK_CONFIG,
     "xai": _XAI_CONFIG,
     "anthropic": _ANTHROPIC_CONFIG,
