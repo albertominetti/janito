@@ -182,6 +182,41 @@ if pytest is not None:
         assert get_provider_config("bogus") is None
         assert get_base_url_from_provider("bogus") is None
 
+    def test_apertus_provider_builtin_config():
+        # Apertus is served through Swisscom's OpenAI-compatible gateway
+        # (Chat Completions only) with a 262K-token context window.
+        assert is_supported_provider("apertus")
+        assert is_supported_provider("Apertus")
+        provider = get_provider("apertus")
+        assert provider.default_model() == "swiss-ai/Apertus-v1.5-70B"
+        assert (
+            provider.endpoint_for("Completions")
+            == "https://api.swisscom.com/products/swiss-ai-weeks/apertus-1.5-70b/v1"
+        )
+        assert get_supported_api_types_from_provider("apertus") == ["Completions"]
+        assert get_default_api_type_from_provider("apertus") == "Completions"
+        assert get_default_max_input_tokens_from_provider("apertus") == 262144
+        assert get_endpoint_by_api_type("apertus") is None
+
+    def test_apertus_registry_and_costing():
+        # Registry resolves case-insensitively with canonical casing.
+        assert canonical_provider_name("APERTUS") == "apertus"
+        assert canonical_provider_name("Apertus") == "apertus"
+        provider = get_provider("APERTUS")
+        assert provider is not None and provider.name == "apertus"
+        assert "apertus" in list_supported_providers()
+        # No cost module ships for apertus: display N/A, numeric None.
+        from janito.providers.costing import get_provider_cost, get_provider_cost_value
+
+        assert (
+            get_provider_cost("apertus", "swiss-ai/Apertus-v1.5-70B", 100, 50, 0)
+            == "N/A"
+        )
+        assert (
+            get_provider_cost_value("apertus", "swiss-ai/Apertus-v1.5-70B", 100, 50, 0)
+            is None
+        )
+
     def test_get_provider_config_with_model():
         """``get_provider_config(provider, model)`` returns the config for that
         model *within* the provider instead of the whole provider entry."""
@@ -555,6 +590,7 @@ if pytest is not None:
             "zai",
             "xai",
             "anthropic",
+            "apertus",
             "custom",
         ):
             assert get_default_thinking_from_provider(name) is False
@@ -585,6 +621,7 @@ if pytest is not None:
             "zai",
             "xai",
             "anthropic",
+            "apertus",
             "custom",
         ):
             assert get_preserve_thinking_from_provider(name) is None
@@ -817,6 +854,7 @@ if pytest is not None:
             "moonshot",
             "zai",
             "xai",
+            "apertus",
         ):
             assert get_supported_api_types_from_provider(name) == ["Completions"]
             assert get_default_api_type_from_provider(name) == "Completions"
