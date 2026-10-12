@@ -101,13 +101,19 @@ and which still need a key or an endpoint.
 The built-in default model is `gpt-6.1-sol`. An explicitly configured model
 or a per-call `--model` selection takes precedence.
 
+Two authentication modes are supported: a pay-as-you-go **API key**, or
+**Sign in with ChatGPT** (OAuth, uses your ChatGPT plan allowance instead
+of API billing — see [Sign in with ChatGPT](#sign-in-with-chatgpt-plan-allowance-no-api-key)).
+
 ### Configuration
 
 ```bash
 # Step 1: Set provider and model
 janito --set provider=openai --set model=gpt-6.1-sol
-# Step 2: Store API key
+# Step 2a: Store API key (pay as you go)
 janito --set-api-key="sk-your-key" --provider openai
+# ...or step 2b: sign in with ChatGPT (OAuth, no API key)
+janito --provider openai --login
 ```
 
 Or interactively:
@@ -116,9 +122,22 @@ Or interactively:
 janito --config
 ```
 
-> API keys are stored in `~/.janito/auth.json`; the model is stored in
-> `~/.janito/config.json`. janito does not read `OPENAI_*` environment
-> variables. See [Configuration Priority](index.md#configuration-priority).
+> API keys and OAuth credentials are stored in `~/.janito/auth.json`; the
+> model is stored in `~/.janito/config.json`. janito does not read
+> `OPENAI_*` environment variables. See
+> [Configuration Priority](index.md#configuration-priority).
+
+### Popular Models
+
+| Model | Description |
+|-------|-------------|
+| `gpt-6.1-sol` | Latest flagship model (default, built-in) |
+| `gpt-6-sol` | Previous flagship model (built-in) |
+| `gpt-6-luna` | Fast, cost-effective model (built-in) |
+| `gpt-6-astra` | Highest capability model (built-in) |
+
+Model selection is restricted to the built-in models above.
+`janito --list-models` shows the accepted names.
 
 ### Sign in with ChatGPT (plan allowance, no API key)
 
