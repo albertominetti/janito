@@ -5,7 +5,11 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/joaompinto/janito/compare/v4.46.0...HEAD)
+## [Unreleased](https://github.com/joaompinto/janito/compare/v4.47.0...HEAD)
+
+Changes since `v4.47.0` (2026-10-12).
+
+## [v4.47.0](https://github.com/joaompinto/janito/compare/v4.46.0...v4.47.0) - 2026-10-12
 
 Changes since `v4.46.0` (2026-10-08).
 
@@ -64,3 +68,6 @@ Changes since `v4.46.0` (2026-10-08).
   re-authentication even when fresh.
 - ChatGPT-plan `401 token_expired` failures now explain re-authentication
   (`--logout` + `--login`, or `--login -f`) instead of "verify your API key".
+- File tools now auto-ignore the `.janito/` directory via built-in
+  `.janitoignore` defaults, preventing session data from leaking into
+  listings and search.
