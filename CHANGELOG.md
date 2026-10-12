@@ -8,3 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/joaompinto/janito/compare/v4.47.0...HEAD)
 
 Changes since `v4.47.0` (2026-10-12).
+
+### Added
+
+- `scripts/install-janito-dev.sh`: install the current source tree as the
+  `janito-dev` user command (editable install into `.venv-dev` plus a
+  `~/.local/bin/janito-dev` launcher). Picks the first available tool:
+  `uv` > `conda` > `pip`.

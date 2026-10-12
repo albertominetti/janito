@@ -41,6 +41,20 @@ uv run python -m janito --config
 uv run python -m janito "Hello"
 ```
 
+## `janito-dev` Launcher
+
+To run the current checkout as `janito-dev` alongside any released `janito`
+install (editable install, so source changes take effect immediately):
+
+```bash
+./scripts/install-janito-dev.sh
+janito-dev --version
+```
+
+The script picks the first available tool (`uv` > `conda` > `pip`). It creates the
+project-local `.venv-dev` virtualenv and writes the launcher to
+`~/.local/bin/janito-dev`.
+
 ## Testing
 
 ```bash
