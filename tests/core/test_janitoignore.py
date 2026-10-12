@@ -203,3 +203,59 @@ def test_janitoignore_file_itself_auto_ignored(project_dir):
     )
     assert "visible.txt" in searched
     assert ".janitoignore" not in searched
+
+
+# ---------------------------------------------------------------------------
+# The .janito/ directory is always ignored by default
+# ---------------------------------------------------------------------------
+
+
+def test_janito_dir_auto_ignored_list_files(project_dir):
+    """.janito/ never appears in listings, even with respect_gitignore=False."""
+    (project_dir / ".janito").mkdir(exist_ok=True)
+    (project_dir / ".janito" / "session.json").write_text("needle\n", encoding="utf-8")
+
+    result = ListFiles().run(directory=".", respect_gitignore=False)
+
+    assert result["success"] is True
+    names = _basenames(result["files"])
+    assert ".janito" not in names
+    assert "session.json" not in names
+    assert "visible.txt" in names
+
+
+def test_janito_dir_auto_ignored_recursive(project_dir):
+    """.janito/ is pruned when walking recursively."""
+    (project_dir / ".janito").mkdir(exist_ok=True)
+    (project_dir / ".janito" / "session.json").write_text("needle\n", encoding="utf-8")
+
+    result = ListFiles().run(directory=".", recursive=True, respect_gitignore=False)
+
+    assert result["success"] is True
+    names = _basenames(result["files"])
+    assert ".janito" not in names
+    assert "session.json" not in names
+    assert "visible.txt" in names
+
+
+def test_janito_dir_auto_ignored_without_janitoignore_file(tmp_path, monkeypatch):
+    """.janito/ is ignored even when no .janitoignore file exists."""
+    (tmp_path / ".janito").mkdir()
+    (tmp_path / ".janito" / "session.json").write_text("needle\n", encoding="utf-8")
+    (tmp_path / "visible.txt").write_text("needle\n", encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+
+    result = ListFiles().run(directory=".", respect_gitignore=False)
+
+    assert result["success"] is True
+    names = _basenames(result["files"])
+    assert ".janito" not in names
+    assert "session.json" not in names
+    assert "visible.txt" in names
+    assert result["janitoignore_applied"] is True
+
+    searched = _basenames(
+        m.split(":")[0] for m in SearchText().run(paths=".", query="needle", respect_gitignore=False)["matches"]
+    )
+    assert "visible.txt" in searched
+    assert "session.json" not in searched

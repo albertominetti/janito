@@ -55,22 +55,36 @@ def load_gitignore_spec(directory: str):
     return load_ignore_spec(directory, ".gitignore")
 
 
+DEFAULT_JANITOIGNORE_PATTERNS = [".janitoignore\n", ".janito/\n", ".janito\n"]
+
+
 def load_janitoignore_spec(directory: str):
     """
     Load .janitoignore patterns from the specified directory.
 
     .janitoignore is always respected by the file tools, regardless of the
-    respect_gitignore setting. The .janitoignore file itself is automatically
-    added to the ignore list, so it never appears in listings or search
-    results.
+    respect_gitignore setting. The .janitoignore file itself and the .janito/
+    directory are automatically added to the ignore list, so they never
+    appear in listings or search results.
 
     Args:
         directory (str): The directory to look for .janitoignore
 
     Returns:
-        A PathSpec object, or None if no .janitoignore file exists.
+        A PathSpec object with default ignores, merged with the
+        .janitoignore file contents when present. Never None.
     """
-    return load_ignore_spec(directory, ".janitoignore", extra_patterns=[".janitoignore\n"])
+    ignore_path = os.path.join(directory, ".janitoignore")
+
+    if not os.path.exists(ignore_path):
+        return PathSpec.from_lines(GitWildMatchPattern, list(DEFAULT_JANITOIGNORE_PATTERNS))
+
+    with open(ignore_path) as f:
+        patterns = f.readlines()
+
+    patterns.extend(DEFAULT_JANITOIGNORE_PATTERNS)
+
+    return PathSpec.from_lines(GitWildMatchPattern, patterns)
 
 
 def is_ignored_by_gitignore(rel_path: str, gitignore_spec, is_dir: bool = False) -> bool:
