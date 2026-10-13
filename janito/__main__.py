@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-OpenAI CLI - A simple command-line interface to interact with OpenAI-compatible endpoints.
+Janito - AI Coding Agent with tools, MCP, and skills.
 
 This CLI resolves its configuration from local files (no environment variables):
 - API key:  from ~/.janito/auth.json for the active provider (--set-api-key)

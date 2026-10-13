@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "janito"
 dynamic = ["version"]
-description = "OpenAI CLI with Function Calling, MCP Support, and Extensible Tools"
+description = "AI Coding Agent with tools, MCP, and skills"
 readme = "README.md"
 authors = [{name = "Janito Developer", email = "developer@example.com"}]
 license = "MIT"

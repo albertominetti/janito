@@ -18,3 +18,8 @@ Changes since `v4.47.0` (2026-10-12).
 - Docs: OpenAI provider section now lists the built-in models (`gpt-6.1-sol`
   default, `gpt-6-sol`, `gpt-6-luna`, `gpt-6-astra`) and documents both
   authentication modes (pay-as-you-go API key and Sign in with ChatGPT OAuth).
+
+### Changed
+
+- Describe Janito as an **AI Coding Agent with tools, MCP, and skills** across
+  the README, documentation, package metadata, and CLI help.

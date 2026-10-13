@@ -1,6 +1,6 @@
-# janito
+# Janito — AI Coding Agent
 
-**janito** is an OpenAI CLI (Command-Line Interface) with function calling capabilities and MCP (Model Context Protocol) support. It allows you to interact with AI models from the terminal with built-in tools and integrations.
+**Janito** is an AI Coding Agent with tools, MCP (Model Context Protocol), and skills. Work on your code from the terminal or browser with built-in tools and integrations.
 
 ## Features
 

@@ -1,8 +1,8 @@
 """
-janito - OpenAI CLI with Function Calling Tools
+Janito - AI Coding Agent with tools, MCP, and skills.
 
-A simple command-line interface to interact with OpenAI-compatible endpoints
-with built-in function calling capabilities and MCP (Model Context Protocol) support.
+An AI Coding Agent with terminal and browser interfaces, built-in tools,
+MCP (Model Context Protocol) support, and task-specific skills.
 """
 
 from ._version import __version__, __version_tuple__

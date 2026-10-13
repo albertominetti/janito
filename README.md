@@ -1,4 +1,6 @@
-# janito - a development agent with function calling, MCP and skills
+# Janito — AI Coding Agent
+
+Janito is an AI Coding Agent with tools, MCP, and skills.
 
 ![Console vs Web](https://raw.githubusercontent.com/joaompinto/janito/main/docs/imgs/console_vs_web.png)
 

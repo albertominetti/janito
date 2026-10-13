@@ -13,7 +13,7 @@ def create_parser() -> argparse.ArgumentParser:
     """
     parser = argparse.ArgumentParser(
         prog="janito",
-        description="OpenAI CLI - Send prompts to OpenAI-compatible endpoints",
+        description="Janito - AI Coding Agent with tools, MCP, and skills",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Configuration:

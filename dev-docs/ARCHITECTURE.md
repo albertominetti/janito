@@ -1,6 +1,6 @@
 # Architecture
 
-This document summarizes the architecture of **janito**, a development agent
+This document summarizes the architecture of **Janito**, an AI Coding Agent
 with function calling, MCP support and skills. It runs through three interfaces
 built on the same engine: a terminal CLI/shell, an (alpha) browser-based
 web UI, and an (alpha) ACP stdio agent for editors.
