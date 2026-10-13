@@ -33,9 +33,11 @@ uv tool install janito
 # Configure interactively
 janito --config
 
-# Or set options directly (two steps: config, then API key)
-janito --set provider=openai --set model=gpt-6-luna
+# Or set options directly (two steps: config, then API key or ChatGPT login)
+janito --set provider=openai --set model=gpt-6.1-sol
 janito --set-api-key="sk-your-key" --provider openai
+# ...or sign in with your ChatGPT plan instead of an API key:
+# janito --provider openai --login
 
 # Start chatting
 janito "Hello!"
@@ -68,7 +70,7 @@ janito --config
 You'll be prompted for:
 - **Provider** - `openai` or `custom`
 - **API Key** - Masked for security
-- **Model** - e.g., `gpt-6-luna`
+- **Model** - e.g., `gpt-6.1-sol`
 - **Max Output Tokens** - Maximum output tokens (default: 65536)
 - **Max Input Tokens** - Maximum input tokens / context window (default: 128000)
 
@@ -78,7 +80,7 @@ Set options directly from the command line:
 
 ```bash
 # Single key-value
-janito --set model=gpt-6-luna
+janito --set model=gpt-6.1-sol
 ```
 
 You can also use `--get`, `--unset`, and `--set-secret` with multiple values.
@@ -96,7 +98,7 @@ janito --show-config
 | Alibaba  | qwen3.8-flash | Pay as you go |
 | Moonshot | kimi-k3 | $15/month (Moderato)|
 | z.ai     | glm-5.3-flash | $12.6/month (Lite)|
-| openai   | gpt-6 | Pay as you go |
+| openai   | gpt-6.1-sol | Pay as you go / ChatGPT plan (OAuth) |
 
 
 For custom endpoints (base-url), see [README_custom.md](README_custom.md).
@@ -204,9 +206,11 @@ janito --log=info,debug "Your prompt" # Multiple levels
 
 ```bash
 # Step 1: Set provider and model
-janito --set provider=openai --set model=gpt-6-luna
-# Step 2: Store API key
+janito --set provider=openai --set model=gpt-6.1-sol
+# Step 2a: Store API key (pay as you go)
 janito --set-api-key="sk-your-key" --provider openai
+# ...or step 2b: sign in with ChatGPT (OAuth, no API key)
+# janito --provider openai --login
 
 # Then run any prompt
 janito "Explain quantum computing"
