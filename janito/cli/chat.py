@@ -220,15 +220,21 @@ def _make_turn_factory(
     return turn_factory
 
 
-def print_version_banner(console=None):
-    """Print a banner with the version and the current working directory."""
+def print_version_banner(console=None, *, role: str | None = None):
+    """Print the version, working directory, and resolved session role."""
     global _banner_printed
 
     from rich.console import Console
+    from rich.text import Text
+
+    from ..config_loaders import load_role
 
     if console is None:
         console = Console()
     console.print(f"Janito [cyan]{__version__}[/cyan] - Working at " f"[magenta]{display_path(os.getcwd())}[/magenta]")
+    role_line = Text("Janito role is ")
+    role_line.append(load_role(role), style="bold green")
+    console.print(role_line)
     _banner_printed = True
 
 
@@ -252,7 +258,7 @@ def _print_privileges_notice(args) -> None:
     from rich.console import Console
 
     if not _banner_printed:
-        print_version_banner()
+        print_version_banner(role=getattr(args, "role", None))
     Console().print(
         "Warning: running with full privileges (rwx). " "Use -r/-w/-x to restrict.",
         style="yellow",
@@ -546,7 +552,7 @@ def run_single_prompt(args):
     import sys
 
     if not _banner_printed:
-        print_version_banner()
+        print_version_banner(role=getattr(args, "role", None))
     _print_privileges_notice(args)
     _enable_requested_toolsets(args)
 

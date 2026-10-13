@@ -93,3 +93,51 @@ else:  # pragma: no cover - fallback runner without pytest
 
     if __name__ == "__main__":
         _main()
+
+
+@pytest.mark.parametrize(
+    "cli_role,configured_role",
+    [
+        (None, None),
+        (None, "systems engineer"),
+        ("technical writer", "systems engineer"),
+        ("engineer [specialty]", None),
+    ],
+)
+def test_banner_role_resolution_and_style(monkeypatch, cli_role, configured_role):
+    from unittest.mock import Mock
+
+    from rich.style import Style
+    from rich.text import Text
+
+    from janito.config_loaders import DEFAULT_ROLE
+
+    monkeypatch.setattr("janito.config_store.get_config_value", lambda key: configured_role)
+    console = Mock()
+    print_version_banner(console, role=cli_role)
+
+    assert console.print.call_count == 2
+    role_line = console.print.call_args_list[1].args[0]
+    expected = cli_role if cli_role is not None else configured_role or DEFAULT_ROLE
+    assert isinstance(role_line, Text)
+    assert role_line.plain == f"Janito role is {expected}"
+    (span,) = role_line.spans
+    assert role_line.plain[span.start : span.end] == expected
+    assert Style.parse(span.style) == Style.parse("bold green")
+
+
+@pytest.mark.parametrize("acp", [False, True])
+def test_main_banner_forwards_role_unless_headless(monkeypatch, acp):
+    from types import SimpleNamespace
+    from unittest.mock import Mock
+
+    import janito.__main__ as main_mod
+
+    banner = Mock()
+    monkeypatch.setattr(main_mod, "print_version_banner", banner)
+    main_mod._print_version_banner(SimpleNamespace(acp=acp, role="technical writer"))
+
+    if acp:
+        banner.assert_not_called()
+    else:
+        banner.assert_called_once_with(role="technical writer")

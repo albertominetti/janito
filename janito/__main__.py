@@ -251,7 +251,7 @@ def _print_version_banner(args) -> None:
     """Print the version banner, unless a headless mode owns stdout."""
     if getattr(args, "acp", False):
         return
-    print_version_banner()
+    print_version_banner(role=getattr(args, "role", None))
 
 
 def _run_web(args) -> int:

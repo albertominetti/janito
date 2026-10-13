@@ -69,6 +69,8 @@ janito -R "systems engineer" --show-system-prompt
 ```
 
 Resolution order is **`-R/--role` > configured `role` > `software developer`**.
+At startup, the line immediately below the version banner displays
+`Janito role is <role>`, with the resolved role in bold green.
 The CLI flag affects only the current run and does not change configuration.
 The setting is global, not provider- or model-scoped, and follows normal
 project-local configuration precedence. Removing a local override may expose

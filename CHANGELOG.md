@@ -11,6 +11,9 @@ Changes since `v4.47.0` (2026-10-12).
 
 ### Added
 
+- CLI startup banner displays `Janito role is <role>` below the version,
+  with the resolved session role rendered in bold green using Rich.
+
 - `scripts/install-janito-dev.sh`: install the current source tree as the
   `janito-dev` user command (editable install into `.venv-dev` plus a
   `~/.local/bin/janito-dev` launcher). Picks the first available tool:
