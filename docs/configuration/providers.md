@@ -198,7 +198,7 @@ Use Google Gemini models through their OpenAI-compatible API.
 
 ```bash
 # Step 1: Set provider and model
-janito --set provider=google --set model=gemini-3.7-flash
+janito --set provider=google --set model=gemini-3.8-flash
 # Step 2: Store API key
 janito --set-api-key="your-gemini-api-key" --provider google
 ```
@@ -236,7 +236,9 @@ exactly like the other API types (MCP included).
 
 | Model | Description |
 |-------|-------------|
-| `gemini-3.7-flash` | Latest Gemini Flash model (default, built-in) |
+| `gemini-3.7-flash` | Gemini Flash model |
+| `gemini-3.8-flash` | Latest Gemini Flash model (default, built-in) |
+| `gemini-4-argon` | Flagship Gemini 4 reasoning model (1M unified context, up to 1M output; $2 in / $10 out per 1M intro thru Nov 30 2026) |
 
 Model selection is restricted to the built-in models above; other Gemini
 names such as `gemini-2.5-pro` are not accepted for this provider.
@@ -259,7 +261,7 @@ janito --provider google --set effort=medium
 
 Resolution order: `--effort` > per-provider config value
 (`--set effort=...`) > the model's own default level (`medium` for
-`gemini-3.7-flash`).
+`gemini-3.8-flash`).
 
 ### Thinking Mode
 
@@ -275,7 +277,7 @@ request body.
 
 ```bash
 # Step 1: Set provider and model
-janito --set provider=google --set model=gemini-3.7-flash
+janito --set provider=google --set model=gemini-3.8-flash
 # Step 2: Store API key
 janito --set-api-key="your-gemini-api-key" --provider google
 # Step 3: Run prompt

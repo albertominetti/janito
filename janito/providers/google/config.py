@@ -22,7 +22,7 @@ The Gemini models can be accessed two ways:
 
 #: The config entry for the ``google`` provider.
 PROVIDER_CONFIG: dict = {
-    "default_model": "gemini-3.7-flash",
+    "default_model": "gemini-3.8-flash",
     # Google's OpenAI-compatible base URL: the OpenAI SDK appends
     # /chat/completions to it.  Only the Chat Completions API is documented
     # by the OpenAI-compatibility layer, so the provider is Completions-only.
@@ -45,6 +45,39 @@ PROVIDER_CONFIG: dict = {
     # the API maps to the model's ``thinking_level``.
     "gemini_flavor": True,
     "models": {
+        "gemini-4-argon": {
+            # Completions is the built-in default (Google's OpenAI-
+            # compatibility layer, which works out of the box with the
+            # hard `openai` dependency).  The native Gemini API type is
+            # selectable with --set api-type=Gemini / --api-type Gemini
+            # (it requires the optional `google-genai` package; see
+            # REQUIRES_BY_API_TYPE).
+            "supported_api_types": ["Completions", "Gemini"],
+            "default_api_type": "Completions",  # built-in default (the first supported type)
+            # Unified 1M-token window: input + thinking + output share
+            # 1,048,576 tokens. Long decode supports up to 1M output
+            # tokens (requires background execution past 64k).
+            "max_input_tokens": 1048576,  # 1M
+            "max_output_tokens": 1000000,  # 1M long decode
+            # Gemini 4 is a reasoning model; thinking cannot be disabled.
+            # reasoning_effort maps to the model's thinking_level, which
+            # accepts low/medium/high (default medium).
+            "default_reasoning_effort": "medium",
+            "supported_reasoning_efforts": [
+                {
+                    "effort": "low",
+                    "description": "Lighter reasoning for fast responses",
+                },
+                {
+                    "effort": "medium",
+                    "description": "Standard reasoning depth",
+                },
+                {
+                    "effort": "high",
+                    "description": "Deep reasoning for complex problems",
+                },
+            ],
+        },
         "gemini-3.8-flash": {
             # Completions is the built-in default (Google's OpenAI-
             # compatibility layer, which works out of the box with the

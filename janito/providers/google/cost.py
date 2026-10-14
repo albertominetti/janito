@@ -14,9 +14,15 @@ relying on them.
 #: Google applies context caching: cached input tokens are billed at the
 #: context cache read rate ($0.1875/1M, 25% of input token price).
 #: There is no peak-hour surcharge.
+#: Gemini 4 (gemini-4-argon) rates are the introductory paid-tier rates
+#: ($2.00 input / $0.10 cache read / $10.00 output per 1M tokens, valid
+#: through Nov 30 2026; standard rates from Dec 1 2026 are $4.00 / $0.20 /
+#: $20.00). Source: https://ai.google.dev/pricing and
+#: https://ai.google.dev/gemini-api/docs/gemini-4. No free tier.
 _MODEL_RATES: dict[str, tuple[float, float, float]] = {
     "gemini-3.7-flash": (0.75, 0.1875, 3.75),
     "gemini-3.8-flash": (0.75, 0.1875, 3.75),
+    "gemini-4-argon": (2.0, 0.10, 10.0),
 }
 
 

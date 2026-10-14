@@ -368,7 +368,7 @@ if pytest is not None:
     def test_google_provider():
         info = get_provider_config("google")
         assert info is not None
-        assert info["default_model"] == "gemini-3.7-flash"
+        assert info["default_model"] == "gemini-3.8-flash"
         model_entry = info["models"]["gemini-3.7-flash"]
         assert model_entry["max_input_tokens"] == 1048576  # 1M (2**20)
         assert model_entry["max_output_tokens"] == 65536
@@ -402,7 +402,7 @@ if pytest is not None:
         # Case-insensitive lookup.
         assert get_provider_config("Google")["endpoint"] == "https://generativelanguage.googleapis.com/v1beta/openai/"
         assert get_base_url_from_provider("google") == "https://generativelanguage.googleapis.com/v1beta/openai/"
-        assert get_default_model_from_provider("google") == "gemini-3.7-flash"
+        assert get_default_model_from_provider("google") == "gemini-3.8-flash"
         assert get_default_max_input_tokens_from_provider("google") == 1048576
         assert get_default_max_output_tokens_from_provider("google") == 65536
         # Gemini 3.x models reason by default; reasoning_effort maps to the
