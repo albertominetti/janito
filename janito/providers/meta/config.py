@@ -124,5 +124,48 @@ PROVIDER_CONFIG: dict = {
                 },
             ],
         },
+        "muse-wonder-1.0": {
+            # Frontier model (Oct 2026): most capable Meta model for
+            # personal/professional agentic tasks. Same API-type surface,
+            # stateless Responses handling, 1M context window and reasoning
+            # efforts as Muse Spark; only the pricing differs (see
+            # janito/providers/meta/cost.py). Default reasoning effort is
+            # the standard level (medium), like the Spark tier.
+            "supported_api_types": ["Responses", "Completions"],
+            "default_api_type": "Responses",
+            "stateless_mode": True,
+            "responses_include": ["reasoning.encrypted_content"],
+            # Request a human-readable reasoning summary on the Responses
+            # API (reasoning.summary="auto", streamed as
+            # response.reasoning_summary_text deltas and surfaced via
+            # on_reasoning). The raw chain of thought stays private.
+            "thinking_summary": True,
+            # Search grounding (issue #131): Responses-only web_search
+            # builtin tool (https://dev.meta.ai/docs/search-grounding).
+            # Not available through Chat Completions.
+            "tools_by_api_type": {
+                "Responses": [{"type": "web_search"}],
+            },
+            "max_input_tokens": 1048576,  # 1M (2**20)
+            "default_reasoning_effort": "medium",
+            "supported_reasoning_efforts": [
+                {
+                    "effort": "minimal",
+                    "description": "Fewest reasoning tokens for simple tasks",
+                },
+                {
+                    "effort": "low",
+                    "description": "Lighter reasoning for fast responses",
+                },
+                {
+                    "effort": "medium",
+                    "description": "Greater reasoning depth for complex problems",
+                },
+                {
+                    "effort": "high",
+                    "description": "Maximum reasoning depth (the effective maximum)",
+                },
+            ],
+        },
     },
 }

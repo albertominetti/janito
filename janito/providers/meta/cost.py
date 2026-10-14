@@ -20,6 +20,7 @@ model        input (1M)    cached(1M)  output(1M)
 ===========  ============  ==========  ==========
 muse-spark-1.3           $1.25      $0.15        $4.25
 muse-spark-1.3-contributor  $0.10   $0.002       $0.20
+muse-wonder-1.0          $4.00      $0.20       $20.00
 ===========  ============  ==========  ==========
 """
 
@@ -28,6 +29,7 @@ muse-spark-1.3-contributor  $0.10   $0.002       $0.20
 _MODEL_RATES: dict[str, tuple[float, float, float]] = {
     "muse-spark-1.3": (1.25, 0.15, 4.25),
     "muse-spark-1.3-contributor": (0.10, 0.002, 0.20),
+    "muse-wonder-1.0": (4.00, 0.20, 20.00),
 }
 
 

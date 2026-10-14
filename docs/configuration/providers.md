@@ -620,9 +620,9 @@ janito --set-api-key="your-minimax-api-key" --provider minimax
 janito "Explain quantum computing"
 ```
 
-## Meta (Muse Spark)
+## Meta (Muse Spark / Wonder)
 
-Use Meta Model API to access Muse Spark models.
+Use Meta Model API to access Muse Spark and Muse Wonder models.
 
 > **Get an API key:** Visit [dev.meta.ai](https://dev.meta.ai/) to create an account and generate a Model API key.
 
@@ -675,6 +675,7 @@ You can inspect the resolved mode with `janito --info` or `/status`
 |-------|-------------|
 | `muse-spark-1.3` | Default model, trained for agentic workflows (1M context, built-in) |
 | `muse-spark-1.3-contributor` | Cheaper contributor tier of the same model |
+| `muse-wonder-1.0` | Frontier model, most capable for agentic tasks (1M context) |
 
 Model selection is restricted to the built-in models above.
 `janito --list-models` shows the accepted names.
