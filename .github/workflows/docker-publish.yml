@@ -66,15 +66,15 @@ jobs:
         run: |
           # Tag is e.g. "v4.49.1" -> pretend version "4.49.1" (strip leading v).
           # Non-release refs (docker-test-*, manual runs) get a PEP 440
-          # local version (0.0.0-test+<sha>) so the build stays valid.
+          # local version (0.0.0+test.<sha>) so the build stays valid.
           ref="${GITHUB_REF_NAME:-}"
           sha_short="${GITHUB_SHA::7}"
           if [[ "$ref" == v* ]]; then
             version="${ref#v}"
           elif [[ "$ref" == docker-test-* ]]; then
-            version="0.0.0-test+${sha_short}"
+            version="0.0.0+test.${sha_short}"
           else
-            version="0.0.0-manual+${sha_short}"
+            version="0.0.0+manual.${sha_short}"
           fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
