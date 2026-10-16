@@ -1,20 +1,16 @@
 name: Publish Docker image to GHCR
 
-# Publishes ghcr.io/<owner>/janito on every release so the web UI can run
-# as `docker run -p 9090:9090 ghcr.io/<owner>/janito:<tag>`.
+# Publishes ghcr.io/joaompinto/janito on every release so the web UI can
+# run as `docker run -p 9090:9090 ghcr.io/joaompinto/janito:<tag>`.
 # Triggers on version tags (v*, same as the PyPI release workflow) and on
-# published GitHub releases. `docker-test-*` tags and manual dispatches
-# publish clearly-marked throwaway tags (`test-<sha>` / `manual-<sha>`) so
-# the pipeline can be verified without cutting a real release (they never
-# touch `latest` or version tags).
+# published GitHub releases. The job is guarded to the official repository
+# so forks never publish to their own registry namespace from this file.
 on:
   push:
     tags:
       - 'v*'
-      - 'docker-test-*'
   release:
     types: [published]
-  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
@@ -23,6 +19,9 @@ env:
 jobs:
   build-and-push:
     name: Build and push Docker image
+    # Only the official repository publishes: forks get this file but the
+    # job is skipped there (same guard as the documentation workflow).
+    if: github.repository == 'joaompinto/janito'
     # Pinned instead of `ubuntu-latest`: the floating label migrates to
     # Ubuntu 26.04 starting 2026-10-19 (actions/runner-images#14748), and a
     # release/publish pipeline should not track a moving OS baseline.
@@ -52,11 +51,9 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
-            type=semver,pattern={{version}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
-            type=semver,pattern={{major}}.{{minor}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
-            type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/tags/v') }}
-            type=raw,value=test-{{sha}},enable=${{ startsWith(github.ref, 'refs/tags/docker-test-') }}
-            type=raw,value=manual-{{sha}},enable=${{ github.event_name == 'workflow_dispatch' }}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest
           labels: |
             org.opencontainers.image.title=janito
             org.opencontainers.image.description=Janito Web UI (janito --web) on port 9090
@@ -65,16 +62,12 @@ jobs:
         id: version
         run: |
           # Tag is e.g. "v4.49.1" -> pretend version "4.49.1" (strip leading v).
-          # Non-release refs (docker-test-*, manual runs) get a PEP 440
-          # local version (0.0.0+test.<sha>) so the build stays valid.
+          # Anything else falls back to the Dockerfile default (0.0.0).
           ref="${GITHUB_REF_NAME:-}"
-          sha_short="${GITHUB_SHA::7}"
           if [[ "$ref" == v* ]]; then
             version="${ref#v}"
-          elif [[ "$ref" == docker-test-* ]]; then
-            version="0.0.0+test.${sha_short}"
           else
-            version="0.0.0+manual.${sha_short}"
+            version="0.0.0"
           fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
 

@@ -59,9 +59,6 @@ docker build --build-arg VERSION=4.49.1 -t janito:local .
 
 `.github/workflows/docker-publish.yml` builds and pushes the image to GHCR
 on every `v*` tag push and on published GitHub releases, using the release
-tag (without the leading `v`) as the `VERSION` build-arg.
-
-To verify the pipeline without cutting a release, push a `docker-test-*`
-tag (or run the workflow manually): it publishes a throwaway
-`test-<sha>` (or `manual-<sha>`) tag and never touches `latest` or the
-version tags.
+tag (without the leading `v`) as the `VERSION` build-arg. The job only
+runs in the official `joaompinto/janito` repository, so forks never
+publish from this workflow.
