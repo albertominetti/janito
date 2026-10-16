@@ -28,7 +28,7 @@ mode. Configure the provider, model, and API key the same way you would for
 any other use:
 
 ```bash
-janito --set provider=openai --set model=gpt-6.1-sol
+janito --set provider=openai --set model=gpt-6-luna
 janito --set-api-key="sk-your-key" --provider openai
 ```
 
