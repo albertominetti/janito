@@ -20,7 +20,7 @@ You'll be prompted for:
 |---------|-------------|---------|
 | **Provider** | Your API provider, selected from a list | `openai`, `custom` |
 | **API Key** | Your API key (masked for security) | `sk-xxxxxxxxxxxxxxxx` |
-| **Model** | Model name to use | `gpt-6-luna`, `claude-sonnet-5-5` |
+| **Model** | Model name to use | `gpt-6.1-sol`, `gpt-6-luna` |
 | **Max Output Tokens** | Maximum output tokens (default: 65536) | `65536` |
 | **Max Input Tokens** | Maximum input tokens / context window (default: 128000) | `128000` |
 
@@ -30,7 +30,7 @@ Set options directly from the command line. Note that `--set` and `--set-api-key
 
 ```bash
 # OpenAI example (two steps: config, then API key)
-janito --set provider=openai --set model=gpt-6-luna
+janito --set provider=openai --set model=gpt-6.1-sol
 janito --set-api-key="sk-your-key" --provider openai
 
 # Local LLM example (local servers use the `custom` provider + endpoint)
@@ -94,7 +94,7 @@ janito --show-config
 
 ```bash
 # Step 1: Set provider and model
-janito --set provider=openai --set model=gpt-6-luna
+janito --set provider=openai --set model=gpt-6.1-sol
 # Step 2: Store API key
 janito --set-api-key="sk-your-key" --provider openai
 # Step 3: Run prompt

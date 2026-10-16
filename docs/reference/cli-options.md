@@ -189,7 +189,7 @@ janito --show-config
 janito --info
 janito --show-providers   # list every provider and variant with its defaults
 janito --list-models      # models available for the active provider
-janito --set provider=openai --set model=gpt-6-luna
+janito --set provider=openai --set model=gpt-6.1-sol
 janito --set-api-key sk-your-key --provider openai
 janito --set-api-key sk-your-key   # uses the configured default provider
 ```
@@ -202,7 +202,7 @@ configuration is *stored* in `./.janito` instead of `~/.janito`, and
 `--list-keys` / `--list-secrets` show both:
 
 ```bash
-janito -l --set model=gpt-6-luna                  # store config in ./.janito
+janito -l --set model=gpt-6.1-sol                  # store config in ./.janito
 janito -l --set-api-key sk-your-key --provider openai   # store the key in ./.janito
 janito -l --list-keys                        # show global and local keys
 ```
