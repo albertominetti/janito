@@ -25,6 +25,41 @@ docker run --rm -p 9090:9090 \
   ghcr.io/joaompinto/janito:latest
 ```
 
+### First run: configure a provider
+
+A fresh container has no provider configured, so the server refuses to
+start (`Error: No provider is configured`). Initialize the named volume
+once by overriding the container command (no TTY needed):
+
+```bash
+# Equivalent of `janito --config`, but headless: writes into the volume's
+# /home/appuser/.janito (config.json + auth.json).
+docker run --rm -v janito-config:/home/appuser/.janito \
+  ghcr.io/joaompinto/janito:latest \
+  janito --set provider=openai --set model=gpt-6.1-sol
+docker run --rm -v janito-config:/home/appuser/.janito \
+  ghcr.io/joaompinto/janito:latest \
+  janito --set-api-key="sk-your-key" --provider openai
+```
+
+Alternatively, mount your existing host config instead of a named volume:
+
+```bash
+docker run --rm -p 9090:9090 \
+  -v ~/.janito:/home/appuser/.janito \
+  ghcr.io/joaompinto/janito:latest
+```
+
+You can also pass `--provider` / `--model` on the server command line
+(the API key itself always comes from the auth store above):
+
+```bash
+docker run --rm -p 9090:9090 -v janito-config:/home/appuser/.janito \
+  ghcr.io/joaompinto/janito:latest \
+  janito --web --web-host 0.0.0.0 --web-port 9090 --no-web-open \
+    --provider openai --model gpt-6.1-sol
+```
+
 Protect the UI with a bearer token (see [Web UI](web-ui.md)):
 
 ```bash
