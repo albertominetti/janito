@@ -14,3 +14,14 @@ Changes since `v4.49.0` (2026-10-15).
 - Docs: document ChatGPT-plan (`--login`) sign-in from a headless or remote
   machine using an SSH port-forward, including the dynamic loopback callback
   port and the 300-second timeout.
+
+### Changed
+
+- Shell `/provider <name>` and `/model <name>` now persist the selection to
+  the project-local config (`./.janito/config.json`) — the flat `provider`
+  key and `providers.<provider>.model` respectively — so the next session
+  started in the same project resumes with the chosen provider/model. The
+  global `~/.janito/config.json` is never modified from the shell;
+  `janito --set provider=...` / `--set model=...` still write the
+  machine-level default. Persistence is best-effort: a failed local write is
+  reported but never breaks the running session.
