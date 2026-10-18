@@ -15,3 +15,14 @@ Changes since `v4.49.0` (2026-10-15).
   (`ghcr.io/joaompinto/janito`) on every release via
   `.github/workflows/docker-publish.yml`; usage documented in
   `docs/usage/docker.md`.
+
+### Changed
+
+- Shell `/provider <name>` and `/model <name>` now persist the selection to
+  the project-local config (`./.janito/config.json`) — the flat `provider`
+  key and `providers.<provider>.model` respectively — so the next session
+  started in the same project resumes with the chosen provider/model. The
+  global `~/.janito/config.json` is never modified from the shell;
+  `janito --set provider=...` / `--set model=...` still write the
+  machine-level default. Persistence is best-effort: a failed local write is
+  reported but never breaks the running session.
