@@ -11,6 +11,10 @@ Changes since `v4.49.0` (2026-10-15).
 
 ### Added
 
+- Docker image for the Web UI (`Dockerfile`, port 9090) published to GHCR
+  (`ghcr.io/joaompinto/janito`) on every release via
+  `.github/workflows/docker-publish.yml`; usage documented in
+  `docs/usage/docker.md`.
 - Docs: document ChatGPT-plan (`--login`) sign-in from a headless or remote
   machine using an SSH port-forward, including the dynamic loopback callback
   port and the 300-second timeout.
